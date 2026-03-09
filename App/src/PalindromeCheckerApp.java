@@ -2,54 +2,27 @@ import java.util.Scanner;
 
 public class PalindromeCheckerApp {
 
-    // Node class for Singly Linked List
-    static class Node {
-        char data;
-        Node next;
+    // Method to check palindrome ignoring spaces and case
+    public static boolean isPalindrome(String input) {
 
-        Node(char data) {
-            this.data = data;
-            this.next = null;
-        }
-    }
+        // Normalize the string
+        // 1. Remove spaces
+        // 2. Convert to lowercase
+        String normalized = input.replaceAll("\\s+", "").toLowerCase();
 
-    // Method to check palindrome
-    public static boolean isPalindrome(Node head) {
+        // Convert to char array
+        char[] arr = normalized.toCharArray();
 
-        if (head == null || head.next == null) {
-            return true;
-        }
+        int left = 0;
+        int right = arr.length - 1;
 
-        // Step 1: Find middle using Fast & Slow pointer
-        Node slow = head;
-        Node fast = head;
-
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-
-        // Step 2: Reverse second half
-        Node prev = null;
-        Node current = slow;
-
-        while (current != null) {
-            Node nextNode = current.next;
-            current.next = prev;
-            prev = current;
-            current = nextNode;
-        }
-
-        // Step 3: Compare first half and reversed second half
-        Node firstHalf = head;
-        Node secondHalf = prev;
-
-        while (secondHalf != null) {
-            if (firstHalf.data != secondHalf.data) {
+        // Check palindrome using two-pointer technique
+        while (left < right) {
+            if (arr[left] != arr[right]) {
                 return false;
             }
-            firstHalf = firstHalf.next;
-            secondHalf = secondHalf.next;
+            left++;
+            right--;
         }
 
         return true;
@@ -57,36 +30,17 @@ public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Enter a string: ");
-        String input = sc.nextLine();
+        System.out.println("Enter a string to check palindrome:");
+        String input = scanner.nextLine();
 
-        // Step 4: Convert string to linked list
-        Node head = null;
-        Node tail = null;
-
-        for (int i = 0; i < input.length(); i++) {
-            Node newNode = new Node(input.charAt(i));
-
-            if (head == null) {
-                head = newNode;
-                tail = newNode;
-            } else {
-                tail.next = newNode;
-                tail = newNode;
-            }
-        }
-
-        // Check Palindrome
-        boolean result = isPalindrome(head);
-
-        if (result) {
-            System.out.println("The given string is a Palindrome.");
+        if (isPalindrome(input)) {
+            System.out.println("The given string is a Palindrome (ignoring spaces and case).");
         } else {
             System.out.println("The given string is NOT a Palindrome.");
         }
 
-        sc.close();
+        scanner.close();
     }
 }
